@@ -1,17 +1,79 @@
+def mostrar_menu_principal():
+    print("\n---- MENU PRINCIPAL ----\n")
+    print("1 - Estudantes")
+    print("2 - Professores")
+    print("3 - Disciplinas")
+    print("4 - Turmas")
+    print("5 - Matrículas")
+    print("9 - Sair")
 
+def mostrar_menu_operacoes():
+    print("1 - Incluir")
+    print("2 - Listar")
+    print("3 - Editar")
+    print("4 - Excluir")
+    print("9 - Voltar")
 
+def incluir_estudante(estudantes):
+    print("==== Inclusão ====")
+    estudante = {}
+    cod = int(input("Informe o código do estudante: "))
+    nome = input("Informe o nome do estudante: ")
+    cpf = input("Informe o CPF do estudante: ")
+    estudante["codigo"] = cod
+    estudante["nome"] = nome
+    estudante["cpf"] = cpf
+    estudantes.append(estudante)
+    input("Pressione ENTER para continuar.\n")
+
+def listar_estudantes(estudantes):
+    print("==== Listagem ====")
+    for estudante in estudantes:
+        print(estudante)
+    input("Pressione ENTER para continuar.\n")
+
+def editar_estudante(estudantes):
+    print("==== Edição ====")
+    cod_editar = int(input("Informe o código do estudante que sera editado: "))
+    cod = int(input("Informe novo código do estudante: "))
+    nome = input("Informe o nome do estudante: ")
+    cpf = input("Informe o CPF do estudante: ")
+    estudante_editar = None
+    for estudante in estudantes:
+        if estudante["codigo"] == cod_editar:
+            estudante_editar = estudante
+            break 
+    if estudante_editar == None: 
+        print("Estudante não encontrado.")
+    else:
+        estudante_editar["codigo"] = cod
+        estudante_editar["nome"] = nome
+        estudante_editar["cpf"] = cpf
+
+def excluir_estudante(estudantes):
+    print("==== Excluir ====")
+    cod_excluir = int(input("Informe o código do estudante que sera excluido: "))
+    estudante_excluir = None
+    for estudante in estudantes:
+        if estudante["codigo"] == cod_excluir:
+            estudante_excluir = estudante
+            break 
+    if estudante_excluir == None: 
+        print("Estudante não encontrado.")
+    else:
+        estudantes.remove(estudante_excluir)
+        print("Estudante excluido com sucesso.")
+                
+    
 menus_1 = {1:"Estudantes", 2:"Professores", 3:"Disciplinas", 4:"Turmas", 5:"Matrículas"}
 menus_2 = {1: "Incluir", 2: "Listar", 3: "Editar", 4: "Excluir", 9: "Voltar"}
 opcao = 0
 estudantes = []
 
 while opcao != 9:
-    print("\n---- MENU PRINCIPAL ----\n")
-
+    
     while True:
-        for key, value in menus_1.items():
-            print(f"({key}) - Gerenciar {value}.")
-        print("(9) - Sair.")
+        mostrar_menu_principal()
         try:
             opcao = int(input("\nInforme o numero a opção desejada: "))
             if opcao == 1 or opcao == 2 or opcao == 3 or opcao == 4 or opcao == 5 or opcao == 9:
@@ -36,8 +98,7 @@ while opcao != 9:
         while True:
             if opcao == 1:
                 print(f"\n---- MENU {menus_1[opcao]} ----\n")
-                for key, value in menus_2.items():
-                    print(f"({key}) - {value}.")
+                mostrar_menu_operacoes()
             try:
                 opcao_2 = int(input("\nInforme o numero da ação desejada: "))
                 if opcao_2 == 1 or opcao_2 == 2 or opcao_2 == 3 or opcao_2 == 4 or opcao_2 == 9:
@@ -51,56 +112,26 @@ while opcao != 9:
             print("")
 
         if opcao_2 == 1:
-            print("==== Inclusão ====")
-            estudante = {}
-            cod = int(input("Informe o código do estudante: "))
-            nome = input("Informe o nome do estudante: ")
-            cpf = input("Informe o CPF do estudante: ")
-            estudante["codigo"] = cod
-            estudante["nome"] = nome
-            estudante["cpf"] = cpf
-            estudantes.append(estudante)
-            input("Pressione ENTER para continuar.\n")
+            incluir_estudante(estudantes)
 
         elif opcao_2 == 2:
-            print("==== Listagem ====")
-            for estudante in estudantes:
-                print(estudante)
-            input("Pressione ENTER para continuar.")
+            if len(estudantes) == 0:
+                print("Nenhum estudante cadastrado.")
+            else:
+                listar_estudantes(estudantes)
 
         elif opcao_2 == 3:
-            print("==== Edição ====")
-            cod_editar = int(input("Informe o código do estudante que sera editado: "))
-            cod = int(input("Informe novo código do estudante: "))
-            nome = input("Informe o nome do estudante: ")
-            cpf = input("Informe o CPF do estudante: ")
-            estudante_editar = None
-            for estudante in estudantes:
-                if estudante["codigo"] == cod_editar:
-                    estudante_editar = estudante
-                    break 
-            if estudante_editar == None: 
-                print("Estudante não encontrado.")
-                continue
+            if len(estudantes) == 0:
+                print("Nenhum estudante cadastrado.")
             else:
-                estudante_editar["codigo"] = cod
-                estudante_editar["nome"] = nome
-                estudante_editar["cpf"] = cpf
+                editar_estudante(estudantes)
                 
         elif opcao_2 == 4:
-            print("==== Excluir ====")
-            cod_excluir = int(input("Informe o código do estudante que sera excluido: "))
-            estudante_excluir = None
-            for estudante in estudantes:
-                if estudante["codigo"] == cod_excluir:
-                    estudante_excluir = estudante
-                    break 
-            if estudante_excluir == None: 
-                print("Estudante não encontrado.")
-                continue
-            else:
-                estudantes.remove(estudante_excluir)
-                
+            if len(estudantes) == 0:
+                print("Nenhum estudante cadastrado.")
+            else:  
+                excluir_estudante(estudantes)
+
         elif opcao_2 == 9:
             print("==== Voltando ====")
             break
