@@ -1,3 +1,5 @@
+import json
+
 def mostrar_menu_principal():
     print("\n---- MENU PRINCIPAL ----\n")
     print("1 - Estudantes")
@@ -23,11 +25,14 @@ def incluir_estudante(estudantes):
     estudante["codigo"] = cod
     estudante["nome"] = nome
     estudante["cpf"] = cpf
+    estudantes = carregar_lista_estudantes()
     estudantes.append(estudante)
+    salvar_lista_estudantes(estudantes)
     input("Pressione ENTER para continuar.\n")
 
-def listar_estudantes(estudantes):
+def listar_estudantes():
     print("==== Listagem ====")
+    estudantes = carregar_lista_estudantes()
     for estudante in estudantes:
         print(estudante)
     input("Pressione ENTER para continuar.\n")
@@ -64,11 +69,20 @@ def excluir_estudante(estudantes):
         estudantes.remove(estudante_excluir)
         print("Estudante excluido com sucesso.")
                 
+def salvar_lista_estudantes(estudantes):
+    with open("estudantes.json", "w") as f:
+        json.dump(estudantes, f)
+
+def carregar_lista_estudantes():
+    try:
+        with open("estudantes.json", "r") as f:
+            return json.load(f)
+    except:
+        return []
     
 menus_1 = {1:"Estudantes", 2:"Professores", 3:"Disciplinas", 4:"Turmas", 5:"Matrículas"}
 menus_2 = {1: "Incluir", 2: "Listar", 3: "Editar", 4: "Excluir", 9: "Voltar"}
 opcao = 0
-estudantes = []
 
 while opcao != 9:
     
