@@ -16,7 +16,7 @@ def mostrar_menu_operacoes():
     print("4 - Excluir")
     print("9 - Voltar")
 
-def incluir_estudante(estudantes):
+def incluir_estudante():
     print("==== Inclusão ====")
     estudante = {}
     cod = int(input("Informe o código do estudante: "))
@@ -30,9 +30,8 @@ def incluir_estudante(estudantes):
     salvar_lista_estudantes(estudantes)
     input("Pressione ENTER para continuar.\n")
 
-def listar_estudantes():
+def listar_estudantes(estudantes):
     print("==== Listagem ====")
-    estudantes = carregar_lista_estudantes()
     for estudante in estudantes:
         print(estudante)
     input("Pressione ENTER para continuar.\n")
@@ -126,9 +125,10 @@ while opcao != 9:
             print("")
 
         if opcao_2 == 1:
-            incluir_estudante(estudantes)
+            incluir_estudante()
 
         elif opcao_2 == 2:
+            estudantes = carregar_lista_estudantes()
             if len(estudantes) == 0:
                 print("Nenhum estudante cadastrado.")
             else:
