@@ -16,71 +16,230 @@ def mostrar_menu_operacoes():
     print("4 - Excluir")
     print("9 - Voltar")
 
-def incluir_estudante():
+def incluir(nome):
     print("==== Inclusão ====")
-    estudante = {}
-    cod = int(input("Informe o código do estudante: "))
-    nome = input("Informe o nome do estudante: ")
-    cpf = input("Informe o CPF do estudante: ")
-    estudante["codigo"] = cod
-    estudante["nome"] = nome
-    estudante["cpf"] = cpf
-    estudantes = carregar_lista_estudantes()
-    estudantes.append(estudante)
-    salvar_lista_estudantes(estudantes)
+    item = {}
+    lista = carregar_lista(nome)
+    if nome == "estudantes":
+        cod = int(input("Informe o código do estudante: "))
+        nome = input("Informe o nome do estudante: ")
+        cpf = input("Informe o CPF do estudante: ")
+        item["codigo"] = cod
+        item["nome"] = nome
+        item["cpf"] = cpf
+        if item in lista:
+            print("Estudante já cadastrado.")
+        else:
+            lista.append(item)
+            salvar_lista("estudantes", lista)
+    elif nome == "professores":
+        cod = int(input("Informe o código do professor: "))
+        nome = input("Informe o nome do professor: ")
+        cpf = input("Informe o CPF do professor: ")
+        item["codigo"] = cod
+        item["nome"] = nome
+        item["cpf"] = cpf
+        if item in lista:
+            print("Professor já cadastrado.")
+        else:
+            lista.append(item)
+            salvar_lista("professores", lista)
+    elif nome == "disciplinas":
+        cod = int(input("Informe o código da disciplina: "))
+        nome = input("Informe o nome da disciplina: ")
+        item["codigo"] = cod
+        item["nome"] = nome
+        if item in lista:
+            print("Disciplina já cadastrada.")
+        else:
+            lista.append(item)
+            salvar_lista("disciplinas", lista)
+    elif nome == "turmas":
+        cod = int(input("Informe o código da turma: "))
+        cod_prof = int(input("Informe o código do professor: "))
+        cod_disc = int(input("Informe o código da disciplina: "))
+        item["codigo"] = cod
+        item["prof"] = cod_prof
+        item["disc"] = cod_disc
+        if item in lista:
+            print("Turma já cadastrada.")
+        else:
+            lista.append(item)
+            salvar_lista("turmas", lista)
+    elif nome == "matriculas":
+        cod_est = int(input("Informe o código do estudante: "))
+        cod_turma = int(input("Informe o código da turma: "))
+        item["estudante"] = cod_est
+        item["turma"] = cod_turma
+        if item in lista:
+            print("Matricula já cadastrada.")
+        else:
+            lista.append(item)
+            salvar_lista("matriculas", lista)
+    else:
+        print("Lista não encontrada.")
     input("Pressione ENTER para continuar.\n")
 
-def listar_estudantes(estudantes):
+
+def listar(nome):
+    lista= carregar_lista(nome)
     print("==== Listagem ====")
-    for estudante in estudantes:
-        print(estudante)
+    if len(lista) == 0:
+        print("Nenhum item cadastrado.")
+    else:
+        for item in lista:
+            print(item)
     input("Pressione ENTER para continuar.\n")
 
-def editar_estudante(estudantes):
-    print("==== Edição ====")
-    cod_editar = int(input("Informe o código do estudante que sera editado: "))
-    cod = int(input("Informe novo código do estudante: "))
-    nome = input("Informe o nome do estudante: ")
-    cpf = input("Informe o CPF do estudante: ")
-    estudante_editar = None
-    for estudante in estudantes:
-        if estudante["codigo"] == cod_editar:
-            estudante_editar = estudante
-            break 
-    if estudante_editar == None: 
-        print("Estudante não encontrado.")
+def editar_estudante():
+    estudantes = carregar_lista("estudantes")
+    if estudantes == []:
+        print("Lista vazia.")
     else:
-        estudante_editar["codigo"] = cod
-        estudante_editar["nome"] = nome
-        estudante_editar["cpf"] = cpf
+        print("==== Edição ====")
+        cod_editar = int(input("Informe o código do estudante que sera editado: "))
+        cod = int(input("Informe novo código do estudante: "))
+        nome = input("Informe o nome do estudante: ")
+        cpf = input("Informe o CPF do estudante: ")
+        estudante_editar = None
+        for estudante in estudantes:
+            if estudante["codigo"] == cod_editar:
+                estudante_editar = estudante
+                break 
+        if estudante_editar == None: 
+            print("Estudante não encontrado.")
+        else:
+            estudante_editar["codigo"] = cod
+            estudante_editar["nome"] = nome
+            estudante_editar["cpf"] = cpf
+            salvar_lista('estudantes', estudantes)
 
-def excluir_estudante(estudantes):
-    print("==== Excluir ====")
-    cod_excluir = int(input("Informe o código do estudante que sera excluido: "))
-    estudante_excluir = None
-    for estudante in estudantes:
-        if estudante["codigo"] == cod_excluir:
-            estudante_excluir = estudante
-            break 
-    if estudante_excluir == None: 
-        print("Estudante não encontrado.")
+def editar_professor():
+    professores = carregar_lista("professores")
+    if professores == []:
+        print("Lista vazia.")
     else:
-        estudantes.remove(estudante_excluir)
-        print("Estudante excluido com sucesso.")
-                
-def salvar_lista_estudantes(estudantes):
-    with open("estudantes.json", "w") as f:
-        json.dump(estudantes, f)
+        print("==== Edição ====")
+        cod_editar = int(input("Informe o código do professor que sera editado: "))
+        cod = int(input("Informe novo código do professor: "))
+        nome = input("Informe o nome do professor: ")
+        cpf = input("Informe o CPF do professor: ")
+        professor_editar = None
+        for professor in professores:
+            if professor["codigo"] == cod_editar:
+                professor_editar = professor
+                break 
+        if professor_editar == None: 
+            print("Professor não encontrado.")
+        else:
+            professor_editar["codigo"] = cod
+            professor_editar["nome"] = nome
+            professor_editar["cpf"] = cpf
+            salvar_lista('professores', professores)
 
-def carregar_lista_estudantes():
+def editar_disciplina():
+    disciplinas = carregar_lista("disciplinas")
+    if disciplinas == []:
+        print("Lista vazia.")
+    else:
+        print("==== Edição ====")
+        cod_editar = int(input("Informe o código da disciplina que sera editada: "))
+        cod = int(input("Informe novo código da disciplina: "))
+        nome = input("Informe o nome da disciplina: ")
+        disciplina_editar = None
+        for disciplina in disciplinas:
+            if disciplina["codigo"] == cod_editar:
+                disciplina_editar = disciplina
+                break 
+        if disciplina_editar == None: 
+            print("Disciplina não encontrada.")
+        else:
+            disciplina_editar["codigo"] = cod
+            disciplina_editar["nome"] = nome
+            salvar_lista('disciplinas', disciplinas)
+
+def editar_turma():
+    turmas = carregar_lista("turmas")
+    if turmas == []:
+        print("Lista vazia.")
+    else:
+        print("==== Edição ====")
+        cod_editar = int(input("Informe o código da turma que sera editada: "))
+        cod = int(input("Informe novo código da turma: "))
+        cod_prof = int(input("Informe o novo código do professor: "))
+        cod_disc = int(input("Informe o novo código da disciplina: "))
+        turma_editar = None
+        for turma in turmas:
+            if turma["codigo"] == cod_editar:
+                turma_editar = turma
+                break 
+        if turma_editar == None: 
+            print("Turma não encontrada.")
+        else:
+            turma_editar["codigo"] = cod
+            turma_editar["prof"] = cod_prof
+            turma_editar["disc"] = cod_disc
+            salvar_lista('turmas', turmas)
+
+def editar_matricula():
+    matriculas = carregar_lista("matriculas")
+    if matriculas == []:
+        print("Lista vazia.")
+    else:
+        print("==== Edição ====")
+        cod_editar = int(input("Informe o código do estudante que sera editado: "))
+        cod_est = int(input("Informe o novo código do estudante: "))
+        cod_turma = int(input("Informe o novo código da turma: "))
+        matricula_editar = None
+        for matricula in matriculas:
+            if matricula["estudante"] == cod_editar:
+                matricula_editar = matricula
+                break 
+        if matricula_editar == None: 
+            print("Matricula não encontrada.")
+        else:
+            matricula_editar["estudante"] = cod_est
+            matricula_editar["turma"] = cod_turma
+            salvar_lista('matriculas', matriculas)
+
+
+def excluir(nome):
+    lista = carregar_lista(nome)
+    if lista == []:
+        print("Lista vazia.")
+    else:
+        print("==== Excluir ====")
+        cod_excluir = int(input("Informe o código do item que sera excluido: "))
+        item_excluir = None
+        for item in lista:
+            if nome == "matriculas":
+                if item["estudante"] == cod_excluir:
+                    item_excluir = item
+                    break
+            else:
+                if item["codigo"] == cod_excluir:
+                    item_excluir = item
+                    break 
+        if item_excluir == None: 
+            print("Não encontrado.")
+        else:
+            lista.remove(item_excluir)
+            print("Excluido com sucesso.")
+            salvar_lista(nome, lista)
+                    
+
+def salvar_lista(nome, lista):
+    with open(nome+".json", "w") as f:
+        json.dump(lista, f)
+
+
+def carregar_lista(nome):
     try:
-        with open("estudantes.json", "r") as f:
+        with open(nome+".json", "r") as f:
             return json.load(f)
     except:
         return []
     
-menus_1 = {1:"Estudantes", 2:"Professores", 3:"Disciplinas", 4:"Turmas", 5:"Matrículas"}
-menus_2 = {1: "Incluir", 2: "Listar", 3: "Editar", 4: "Excluir", 9: "Voltar"}
 opcao = 0
 
 while opcao != 9:
@@ -98,10 +257,6 @@ while opcao != 9:
         except:
             print("Outro tipo de erro ocorreu!")
         print("")
-
-    if opcao == 2 or opcao == 3 or opcao == 4 or opcao == 5:
-        print("EM DESENVOLVIMENTO.")
-        continue
     
     if opcao == 9:
         print("Saindo do programa.")
@@ -110,7 +265,19 @@ while opcao != 9:
     while True:
         while True:
             if opcao == 1:
-                print(f"\n---- MENU {menus_1[opcao]} ----\n")
+                print(f"\n---- MENU Estudantes ----\n")
+                mostrar_menu_operacoes()
+            elif opcao == 2:
+                print(f"\n---- MENU Professores ----\n")
+                mostrar_menu_operacoes()
+            elif opcao == 3:
+                print(f"\n---- MENU Disciplinas ----\n")
+                mostrar_menu_operacoes()
+            elif opcao == 4:
+                print(f"\n---- MENU Turmas ----\n")
+                mostrar_menu_operacoes()
+            elif opcao == 5:
+                print(f"\n---- MENU Matrículas ----\n")
                 mostrar_menu_operacoes()
             try:
                 opcao_2 = int(input("\nInforme o numero da ação desejada: "))
@@ -123,28 +290,57 @@ while opcao != 9:
             except:
                 print("Outro tipo de erro ocorreu!")
             print("")
-
+    
         if opcao_2 == 1:
-            incluir_estudante()
+            if opcao == 1:
+                incluir("estudantes")
+            elif opcao == 2:
+                incluir("professores")
+            elif opcao == 3:
+                incluir("disciplinas")
+            elif opcao == 4:
+                incluir("turmas")
+            elif opcao == 5:
+                incluir("matriculas")
 
         elif opcao_2 == 2:
-            estudantes = carregar_lista_estudantes()
-            if len(estudantes) == 0:
-                print("Nenhum estudante cadastrado.")
-            else:
-                listar_estudantes(estudantes)
+            if opcao == 1:
+                listar("estudantes")
+            elif opcao == 2:
+                listar("professores")
+            elif opcao == 3:
+                listar("disciplinas")
+            elif opcao == 4:
+                listar("turmas")
+            elif opcao == 5:
+                listar("matriculas")
+            
 
         elif opcao_2 == 3:
-            if len(estudantes) == 0:
-                print("Nenhum estudante cadastrado.")
-            else:
-                editar_estudante(estudantes)
+            if opcao == 1:
+                editar_estudante()
+            elif opcao == 2:
+                editar_professor()
+            elif opcao == 3:
+                editar_disciplina()
+            elif opcao == 4:
+                editar_turma()
+            elif opcao == 5:
+                editar_matricula()
+            
                 
         elif opcao_2 == 4:
-            if len(estudantes) == 0:
-                print("Nenhum estudante cadastrado.")
-            else:  
-                excluir_estudante(estudantes)
+            if opcao == 1:
+                excluir("estudantes")
+            elif opcao == 2:
+                excluir("professores")
+            elif opcao == 3:
+                excluir("disciplinas")
+            elif opcao == 4:
+                excluir("turmas")
+            elif opcao == 5:
+                excluir("matriculas")
+            
 
         elif opcao_2 == 9:
             print("==== Voltando ====")
